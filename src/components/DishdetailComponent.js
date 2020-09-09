@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import {Card,CardImg,CardImgOverlay,CardBody,CardTitle,CardText} from 'reactstrap';
 
-class DishDetail extends Component{
 
-    constructor(props){
-        super(props);
 
-    }
-    renderDish(dish)
+  function RenderDish({dish})
         {
             if(dish != null){
                return(
@@ -28,17 +24,18 @@ class DishDetail extends Component{
             }
         }
      
-        renderComments(dish){
+      function RenderComments({dish}){
             if(dish != null){
-                console.log(dish.comments)
-              return(dish.comments.map((comment)=>{
-                    return(
-                             <ul key={dish.comments.id} className="list-unstyled">
-                                <li>{comment.comment}</li>
-                                <li>--{comment.author}</li>
-                             </ul>
-                    )
-                })
+              return(
+                        dish.comments.map((comment)=>{
+                            return(
+                                    <ul key={dish.comments.id} className="list-unstyled">
+                                        <li>{comment.comment}</li>
+                                        <li>--{comment.author},{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</li>
+                                    </ul>
+                            )
+                        })
+                  
               )
                
              }else{
@@ -47,22 +44,35 @@ class DishDetail extends Component{
                  )
              }
         }
-    render(){
-      
-        
+       function CommentHeading({dish}){
+            if(dish != null){
+                return(
+                         <h4>Comments</h4>
+                )
+                 
+               }else{
+                   return(
+                       <div></div>
+                   )
+               }
+        }
+ 
+      const DishDetail=(props)=>{
         return(
-            <div className="row">
-                {this.renderDish(this.props.dish)}
-                <div className="col-md-5 col-12 m-1">
-                    <h4>Comments</h4>
-                    {this.renderComments(this.props.dish)}
+            <div className="container">
+                <div className=" row" >
+                 <RenderDish dish={props.dish}/>
+                    <div className="col-md-5 col-12 m-1">
+                        <CommentHeading dish={props.dish}/>
+                        <RenderComments  dish={props.dish}/>
+                    </div>
                 </div>
-               
             </div>
             
         )
 
-    }
-}
+      }
+     
+ 
 
 export default DishDetail;
